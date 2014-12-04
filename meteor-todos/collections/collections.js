@@ -1,0 +1,1 @@
+ToDos = new Mongo.Collection('todos');
