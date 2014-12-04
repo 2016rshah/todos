@@ -1,0 +1,30 @@
+<head>
+  <title>meteor-todos</title>
+</head>
+
+<body>
+	<h1>Welcome to Meteor!</h1>
+	{{> controls}}
+	{{> items}}
+</body>
+
+<template name = "addItem">
+	<form>
+        <input type="text" name="newItem">
+        <input type="submit" value="Add item!" class = "btn btn-info">
+    </form>
+</template>
+<template name = "removeItem">
+	<div class = "btn btn-danger" id = "removeItem">Delete selected item!</div>
+</template>
+<template name = "items">
+	<ul>
+		{{#each items}}
+			<li class = "item">{{item}}</li>
+		{{/each}}
+	</ul>
+</template>
+<template name = "controls">
+	{{> addItem}}
+	{{> removeItem}}
+</template>
