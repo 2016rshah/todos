@@ -19,9 +19,15 @@
 	<div class = "row">
 		{{> items}}
 	</div>
+	<div class = "row">
+		{{> completed}}
+	</div>
 </body>
 
 <template name = "addItem">
+	<div class = "row">
+		<h3>Add Item:</h3>
+	</div>
     <form role="form" class = "form-inline">
 	  <div class="form-group">
 	    <input type="text" class="form-control" name = "newItem" placeholder="New item.">
@@ -29,25 +35,19 @@
 	  </div>
 	</form>
 </template>
-<template name = "removeItem">
-	<div class = "btn btn-danger" id = "removeItem">Delete item.</div>
-</template>
 <template name = "items">
+	<div class = "row">
+		<h3>Tasks:</h3>
+	</div>
 	<div class = "row">
 		<div class = "col-md-3"></div>
 		<div class = "col-md-6">
 			<ul id = "items">
 				{{#each items}}
-					<li class = "item list-group-item">{{item}}</li>
+					<li class = "item list-group-item">{{item}}<div class = "close markCompleted">X</div></li>
+					<!-- <div class = "btn btn-danger btn-rmv pull-right markCompleted">X</div> -->
 				{{/each}}
 			</ul>
-		</div>
-		<div class = "col-md-3"></div>
-	</div>
-	<div class = "row">
-		<div class = "col-md-3"></div>
-		<div class = "col-md-6 taCenter">
-			{{> removeItem}}
 		</div>
 		<div class = "col-md-3"></div>
 	</div>
@@ -57,6 +57,22 @@
 		<div class = "col-md-3"></div>
 		<div class = "col-md-6">
 			{{> addItem}}
+		</div>
+		<div class = "col-md-3"></div>
+	</div>
+</template>
+<template name = "completed">
+	<div class = "row">
+		<h3>Completed tasks:</h3>
+	</div>
+	<div class = "row">
+		<div class = "col-md-3"></div>
+		<div class = "col-md-6">
+			<ul id = "items">
+				{{#each items}}
+					<li class = "completed list-group-item item">{{item}}<div class = "close delCompleted">X</div></li>
+				{{/each}}
+			</ul>
 		</div>
 		<div class = "col-md-3"></div>
 	</div>
