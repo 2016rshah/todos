@@ -4,4 +4,9 @@ if (Meteor.isServer) {
 			return ToDos.remove({_id:id})
 		}
 	});
+	Meteor.publish('ToDos', function (userId) {
+		return ToDos.find({owner:userId})
+		console.log(userId)
+		//return ToDos.find({owner:userId})
+	});
 }
