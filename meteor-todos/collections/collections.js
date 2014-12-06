@@ -1,1 +1,1 @@
-ToDos = new Mongo.Collection('todos');
+ToDos = new Mongo.Collection('ToDos');
