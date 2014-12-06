@@ -1,55 +1,55 @@
 if (Meteor.isClient) {
 
     Deps.autorun(function () {
-      // if (Meteor.user()) console.log('User is logged');
-      // else console.log('User is not logged');
-      Meteor.subscribe('ToDos', Meteor.userId());
+      Meteor.subscribe('ToDos', Meteor.userId(), function(){
+        UnCompleted = ToDos.find({completed:false})
+        console.log("Uncompleted: ", UnCompleted)
+      });
+      Meteor.subscribe('Completed', Meteor.userId(), function(){
+        Completed = ToDos.find({completed:true})
+        console.log("Completed: ", Completed)
+      });
     });
 
 
-    
-    Session.set("currentItem", "Just a temporary id here")
     Template.addItem.events({
         'submit form': function(event){
             event.preventDefault();
             var newItem = (event.target.newItem.value)
             id = Meteor.userId()
-            console.log(id)
             if(newItem.length>0){
                 event.target.newItem.value = ""
                 ToDos.insert({
                     item:newItem, 
-                    owner:id
+                    owner:id,
+                    completed:false
                 })
             }
         }
     })
     Template.items.events({
-        'click .item':function(event){
-            // console.log("parent: ", event.target.parentElement)
-            if(this._id != Session.get("currentItem")){
-                $(".item").each(function(index){
-                    $(this).removeClass("active")
-                })
-                event.target.className+=" active"
-                var itemId = this._id
-                Session.set("currentItem", itemId)
-                console.log(Session.get("currentItem"))
-            }
+        'click .markCompleted': function(event){
+            console.log(this._id)
+            ToDos.update({_id:this._id}, {$set: {completed:true}})
         }
     })
     Template.items.helpers({
         items: function () {
-            return ToDos.find()
+            return ToDos.find({completed:false})
         }
     });
-    Template.removeItem.events({
-        'click #removeItem': function () {
-            Meteor.call("remove", Session.get("currentItem"), function(err, res){
+    Template.completed.helpers({
+        items: function () {
+            return ToDos.find({completed:true})
+        }
+    });
+    Template.completed.events({
+        'click .delCompleted': function(event){
+            Meteor.call("remove", this._id, function(err, res){
                 console.log("Number of items removed: ", res)
             })
         }
-    });
+    })
     Accounts.ui.config({
        passwordSignupFields: 'USERNAME_ONLY'
     });
