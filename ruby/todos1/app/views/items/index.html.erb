@@ -1,0 +1,26 @@
+<%= simple_form_for @item do |form| %>
+  <%= form.input :content, label: "Item you want to add" %>
+  <%= form.input :completed,     as: :select %>
+  <%= form.input :user_id, label: "User Id?" %>
+  <%= form.button :submit %>
+<% end %>
+
+<br><br><br><br>
+
+<h1>Items To Do</h1>
+<% @items.each do |item| %>
+    <% if not item.completed %>
+      <div class="item">
+        <p><%= item.content %></p>
+      </div>
+    <% end %>
+<% end %>
+
+<h1>Items completed</h1>
+<% @items.each do |item| %>
+    <% if item.completed %>
+        <div class = "item">
+            <p><%= item.content %></p>
+        </div>
+    <% end %>
+<% end %>
