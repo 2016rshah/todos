@@ -3,11 +3,9 @@ if (Meteor.isClient) {
     Deps.autorun(function () {
       Meteor.subscribe('ToDos', Meteor.userId(), function(){
         UnCompleted = ToDos.find({completed:false})
-        console.log("Uncompleted: ", UnCompleted)
       });
       Meteor.subscribe('Completed', Meteor.userId(), function(){
         Completed = ToDos.find({completed:true})
-        console.log("Completed: ", Completed)
       });
     });
 
@@ -29,7 +27,6 @@ if (Meteor.isClient) {
     })
     Template.items.events({
         'click .markCompleted': function(event){
-            console.log(this._id)
             ToDos.update({_id:this._id}, {$set: {completed:true}})
         }
     })
@@ -48,6 +45,9 @@ if (Meteor.isClient) {
             Meteor.call("remove", this._id, function(err, res){
                 console.log("Number of items removed: ", res)
             })
+        }, 
+        'dblclick li': function(event){
+            ToDos.update({_id:this._id}, {$set: {completed:false}})
         }
     })
     Accounts.ui.config({
