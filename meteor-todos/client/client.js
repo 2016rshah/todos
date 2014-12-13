@@ -1,5 +1,8 @@
 if (Meteor.isClient) {
 
+    Session.set("currList", "Default")
+
+
     Deps.autorun(function () {
       Meteor.subscribe('ToDos', Meteor.userId(), function(){
         UnCompleted = ToDos.find({completed:false})
@@ -20,7 +23,8 @@ if (Meteor.isClient) {
                 ToDos.insert({
                     item:newItem, 
                     owner:id,
-                    completed:false
+                    completed:false, 
+                    listName:Session.get("currList")
                 })
             }
         }
@@ -32,12 +36,12 @@ if (Meteor.isClient) {
     })
     Template.items.helpers({
         items: function () {
-            return ToDos.find({completed:false})
+            return ToDos.find({completed:false, listName:Session.get("currList")})
         }
     });
     Template.completed.helpers({
         items: function () {
-            return ToDos.find({completed:true})
+            return ToDos.find({completed:true, listName:Session.get("currList")})
         }
     });
     Template.completed.events({
@@ -52,5 +56,55 @@ if (Meteor.isClient) {
     })
     Accounts.ui.config({
        passwordSignupFields: 'USERNAME_ONLY'
+    });
+
+
+    Template.newList.events({
+        'submit form': function (event) {
+            event.preventDefault()
+            Session.set("currList", event.target.newList.value)
+            ToDos.insert({
+                item:"Create the list", 
+                owner:Meteor.userId(),
+                completed:true, 
+                listName:Session.get("currList")
+            })
+            event.target.newList.value = ""
+        }, 
+        'click #hide-btn': function(event){
+            $("#newListWrapper").hide()
+        }
+    });
+    Template.lists.helpers({
+        lists: function () {
+            var lists = []
+            var items = ToDos.find().fetch()
+            for(var i = 0; i<items.length; i++){
+                if(lists.indexOf(items[i].listName) == -1 && items[i].listName !== "Default"){
+                    console.log(items[i].listName)
+                    lists.push(items[i].listName)
+                }
+            }
+            for(var i = 0; i<lists.length; i++){
+                lists[i] = {listName:lists[i]}
+            }
+            return lists
+        }, 
+        currentList:function(){
+            return Session.get("currList")
+        }
+    });
+    Template.lists.events({
+        'click .listName': function (event) {
+            //console.log(event.target.innerText)
+            Session.set("currList", event.target.innerText)
+            console.log("changing lists")
+        },
+        'click #addList': function(event){
+            $("#newListWrapper").show   ()
+        }, 
+        'click #defaultList': function(event){
+            Session.set("currList", "Default")
+        }
     });
 }
