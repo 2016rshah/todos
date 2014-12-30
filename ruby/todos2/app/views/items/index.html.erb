@@ -2,9 +2,20 @@
 <%= render 'form' %>
 
 
-<h1>All</h1>
+<h1>Not completed</h1>
 
 <% @items.each do |item| %>
-    <%= link_to item.content, item %>
-    <p>Submitted about <%= time_ago_in_words(item.created_at) %> ago</p>
+    <% if not item.completed? %>
+        <%= link_to item.content, item %>
+        <p>Submitted about <%= time_ago_in_words(item.created_at) %> ago</p>
+    <% end %>
+<% end %>
+
+
+<h1>Completed</h1>
+<% @items.each do |item| %>
+    <% if item.completed? %>
+        <%= link_to item.content, item %>
+        <p>Submitted about <%= time_ago_in_words(item.created_at) %> ago</p>
+    <% end %>
 <% end %>

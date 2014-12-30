@@ -1,10 +1,12 @@
 class ItemsController < ApplicationController
     
     def index
+        @item = Item.new
         @items = Item.all.order("created_at DESC")
     end
     
     def new
+        @item = Item.new
     end
     
     def create
@@ -20,7 +22,7 @@ class ItemsController < ApplicationController
     private
     
     def item_params
-        params.require(:item).permit(:content)
+        params.require(:item).permit(:content, :completed)
     end
     
 end
