@@ -30,3 +30,8 @@
 	color:red;
 }
 .close:hover { color: red !important; }
+
+
+#hide-btn{
+	margin-top:10px;
+}
